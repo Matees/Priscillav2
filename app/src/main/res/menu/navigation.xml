@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_courses"
+        android:icon="@drawable/ic_school_black_24dp"
+        android:title="Courses"/>
+
+    <item
+        android:id="@+id/navigation_competitions"
+        android:icon="@drawable/ic_school_black_24dp"
+        android:title="Competitions"/>
+
+    <item
+        android:id="@+id/navigation_leaderboard"
+        android:icon="@drawable/ic_school_black_24dp"
+        android:title="Leaderboard"/>
+
+    <item
+        android:id="@+id/navigation_practice"
+        android:icon="@drawable/ic_school_black_24dp"
+        android:title="Practise"/>
+
+    <item
+        android:id="@+id/navigation_discussions"
+        android:icon="@drawable/ic_school_black_24dp"
+        android:title="Discussions"/>
+
+</menu>
