@@ -1,6 +1,7 @@
 package com.example.matej.priscilla_v2.viewmodel;
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;

@@ -2,6 +2,8 @@ package com.example.matej.priscilla_v2;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -59,18 +61,18 @@ public class RecyclerViewCategoryAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(@NonNull RecyclerViewCategoryAdapter.ViewHolder holder, final int position) {
         holder.itemView.setTag(categories.get(position));
 
-        List<Integer> colors = new ArrayList<>();
-//        colors.add(R.color.purple);
-        colors.add(R.color.green);
-        colors.add(R.color.orange);
-        colors.add(R.color.red);
+        List<String> colors = new ArrayList<>();
+        colors.add("#FFAA66CC");
+        colors.add("#FF99CC00");
+        colors.add("#FFFFBB33");
+        colors.add("#FFFF4444");
 
-        int randomAndroidColor = colors.get(new Random().nextInt(2));
+        int index = position;
+        if (position > colors.size()) index = 0;
 
-//        Drawable drawable = context.getResources().getDrawable(R.drawable.circle_button);
-//        drawable.setColorFilter(new PorterDuffColorFilter(randomAndroidColor, PorterDuff.Mode.SCREEN));
+        String randomAndroidColor = colors.get(index);
 
-        holder.button.setBackgroundColor(randomAndroidColor);
+        holder.button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(randomAndroidColor)));
 
         holder.button.setText(categories.get(position).getName());
     }
