@@ -17,6 +17,11 @@ public class Category {
     @SerializedName("created_at")
     @Expose
     private Object createdAt;
+
+    public Category(String name) {
+        this.name = name;
+    }
+
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;

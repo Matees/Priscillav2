@@ -68,15 +68,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        BottomNavigationView navigationView = (BottomNavigationView) findViewById(R.id.navigationBar);
+        ActivityHomeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_home); // this must be called as first in activity, we can then remove setContentView
+        binding.setViewmodel(homeViewModel);
 
 //        Constants.instance(this.getApplicationContext());
         Toast.makeText(this, "You were successfully logged in.", Toast.LENGTH_SHORT).show();
 
         setupRecyclerView(this);
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        ActivityHomeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
-        binding.setViewmodel(homeViewModel);
 
         homeViewModel.init();  // creating homeRepository if already does not exist
         homeViewModel.getHomeRepository().observe(this, new Observer<MainMenu>() {   // observing response of request
@@ -92,7 +91,6 @@ public class HomeActivity extends AppCompatActivity {
                     return;
                 }
                 // temporary
-                Profilmenu profilmenu = mainMenu.getProfilmenu();
                 Message message = new Message("fdsafdasfa", "Title");
                 List<Message> messages = new ArrayList<>();
                 messages.add(message);
@@ -100,8 +98,8 @@ public class HomeActivity extends AppCompatActivity {
 
                 setupListView(mainMenu.getProfilmenu().getValues());
 
-                Gson json = new Gson();
-                Toast.makeText(HomeActivity.this, json.toJson(mainMenu), Toast.LENGTH_LONG).show();
+//                Gson json = new Gson();
+//                Toast.makeText(HomeActivity.this, json.toJson(mainMenu), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -113,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
                     return;
                 }
 
-                Toast.makeText(HomeActivity.this, content, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HomeActivity.this, content, Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(HomeActivity.this, CategoryActivity.class));
             }
         });

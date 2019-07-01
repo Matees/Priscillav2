@@ -10,15 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.matej.priscilla_v2.Constants;
+import com.example.matej.priscilla_v2.LoginResolver;
 import com.example.matej.priscilla_v2.Message;
 import com.example.matej.priscilla_v2.R;
 import com.example.matej.priscilla_v2.RecyclerViewCategoryAdapter;
@@ -37,6 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
+    CategoryViewModel categoryViewModel;
 
     RecyclerView recyclerViewCategories;
     RecyclerViewCategoryAdapter adapterCategories;
@@ -45,37 +51,46 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+//        setContentView(R.layout.activity_category);
 
-        setupRecyclerView();
+        ActivityCategoryBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_category);
+        binding.setViewmodel(categoryViewModel);
 
-        CategoryViewModel categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        setupRecyclerView(this);
 
-//        ActivityCategoryBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_category);
-//        binding.setViewmodel(categoryViewModel);
+        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+
 
         categoryViewModel.init();  // creating homeRepository if already does not exist
         categoryViewModel.getCategoryRepository().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
-                Gson json = new Gson();
-                Toast.makeText(CategoryActivity.this, json.toJson(categories), Toast.LENGTH_LONG).show();
-                adapterCategories.setMessages(categories, CategoryActivity.this);
+//                Gson json = new Gson();
+//                Toast.makeText(CategoryActivity.this, json.toJson(categories), Toast.LENGTH_LONG).show();
+
+                adapterCategories.setCategories(categories, CategoryActivity.this);
 
             }
         });
     }
 
     @SuppressLint("WrongConstant")
-    public void setupRecyclerView(){
+    public void setupRecyclerView(Context ctx){
         recyclerViewCategories = (RecyclerView) findViewById(R.id.recyclerViewCategories);
         recyclerViewCategories.setHasFixedSize(true);
 
-        layoutManagerCategories = new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false);
+        layoutManagerCategories = new GridLayoutManager(ctx, 2, LinearLayoutManager.VERTICAL, false);
         recyclerViewCategories.setLayoutManager(layoutManagerCategories);
 
         adapterCategories = new RecyclerViewCategoryAdapter();
         recyclerViewCategories.setAdapter(adapterCategories);
+
+        adapterCategories.setOnItemClickListener(new RecyclerViewCategoryAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Category category) {
+                //startActivity(new Intent(CategoryActivity.this, CategoryActivity.class));
+            }
+        });
 
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //
@@ -92,5 +107,29 @@ public class CategoryActivity extends AppCompatActivity {
 //                        .show();
 //            }
 //        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.logout:
+                logout(this, LoginActivity.class);
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    public void logout(Context finish, Class start){
+        LoginResolver.clearSp(this);
+
+        startActivity(new Intent(this, LoginActivity.class));
+        this.finish();
     }
 }

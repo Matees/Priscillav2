@@ -29,9 +29,18 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecyclerViewCategoryAdapter extends RecyclerView.Adapter<RecyclerViewCategoryAdapter.ViewHolder> {
-
+    private OnItemClickListener listener;
     private List<Category> categories = new ArrayList<>();
     private Context context;
+
+    public interface OnItemClickListener {
+        void onItemClick(Category category);
+
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     // representing item of a list
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -42,6 +51,16 @@ public class RecyclerViewCategoryAdapter extends RecyclerView.Adapter<RecyclerVi
             super(itemView);  // itemView corresponds to a view list_items
 
             button = itemView.findViewById(R.id.category_item_button);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(categories.get(position));
+                    }
+                }
+            });
         }
     }
 
@@ -51,7 +70,7 @@ public class RecyclerViewCategoryAdapter extends RecyclerView.Adapter<RecyclerVi
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent, false);
 
-        return new RecyclerViewCategoryAdapter.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
 
@@ -82,7 +101,7 @@ public class RecyclerViewCategoryAdapter extends RecyclerView.Adapter<RecyclerVi
         return categories.size();
     }
 
-    public void setMessages(List<Category> categories, Context ctx) {
+    public void setCategories(List<Category> categories, Context ctx) {
         this.context = ctx;
         this.categories = categories;
         notifyDataSetChanged();

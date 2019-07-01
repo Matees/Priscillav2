@@ -27,7 +27,6 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements AuthListener {
     LoginViewModel loginViewModel;
-    KeystoreHelper keyHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
                     return;
                 }
 
-                Toast.makeText(LoginActivity.this, oauth.getAccessToken(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginActivity.this, oauth.getAccessToken(), Toast.LENGTH_SHORT).show();
                 KeystoreHelper.encode(oauth.getAccessToken(), "keyy");
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             }
