@@ -2,10 +2,7 @@ package com.example.matej.priscilla_v2.view;
 
 import com.example.matej.priscilla_v2.Event;
 import com.example.matej.priscilla_v2.databinding.ActivityHomeBinding;
-import com.example.matej.priscilla_v2.databinding.ActivityLoginBinding;
-import com.example.matej.priscilla_v2.model.*;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -14,40 +11,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.matej.priscilla_v2.Constants;
 import com.example.matej.priscilla_v2.LoginResolver;
 import com.example.matej.priscilla_v2.Message;
 import com.example.matej.priscilla_v2.R;
-import com.example.matej.priscilla_v2.RecyclerViewMessageAdapter;
+import com.example.matej.priscilla_v2.adapters.RecyclerViewMessageAdapter;
 import com.example.matej.priscilla_v2.model.MainMenu;
 import com.example.matej.priscilla_v2.viewmodel.HomeViewModel;
-import com.example.matej.priscilla_v2.viewmodel.LoginViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,17 +47,18 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Toast.makeText(this, "You were successfully logged in.", Toast.LENGTH_SHORT).show();
+
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel.init();  // creating homeRepository if already does not exist
 
         ActivityHomeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_home); // this must be called as first in activity, we can then remove setContentView
         binding.setViewmodel(homeViewModel);
 
 //        Constants.instance(this.getApplicationContext());
-        Toast.makeText(this, "You were successfully logged in.", Toast.LENGTH_SHORT).show();
 
         setupRecyclerView(this);
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
 
-        homeViewModel.init();  // creating homeRepository if already does not exist
         homeViewModel.getHomeRepository().observe(this, new Observer<MainMenu>() {   // observing response of request
             @Override
             public void onChanged(MainMenu mainMenu) {

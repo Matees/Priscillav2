@@ -39,7 +39,7 @@ public class CategoryRepository {
     public LiveData<List<Category>> getCategoriesResponse(){
         final MutableLiveData<List<Category>> oauthResponse = new MutableLiveData<>();
 
-        String token = "Bearer " + KeystoreHelper.decodeKey("keyy");
+        String token = "Bearer " + KeystoreHelper.decodeKey("key");
 
         myApi.getCategories(token).enqueue(new Callback<List<Category>>() {
             @Override

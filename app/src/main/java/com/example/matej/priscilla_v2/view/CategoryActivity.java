@@ -12,33 +12,19 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.example.matej.priscilla_v2.Constants;
 import com.example.matej.priscilla_v2.LoginResolver;
-import com.example.matej.priscilla_v2.Message;
 import com.example.matej.priscilla_v2.R;
-import com.example.matej.priscilla_v2.RecyclerViewCategoryAdapter;
-import com.example.matej.priscilla_v2.RecyclerViewMessageAdapter;
+import com.example.matej.priscilla_v2.SpacesItemDecoration;
+import com.example.matej.priscilla_v2.adapters.RecyclerViewCategoryAdapter;
 import com.example.matej.priscilla_v2.databinding.ActivityCategoryBinding;
-import com.example.matej.priscilla_v2.databinding.ActivityHomeBinding;
 import com.example.matej.priscilla_v2.model.Category;
-import com.example.matej.priscilla_v2.model.MainMenu;
-import com.example.matej.priscilla_v2.model.Profilmenu;
 import com.example.matej.priscilla_v2.viewmodel.CategoryViewModel;
-import com.example.matej.priscilla_v2.viewmodel.HomeViewModel;
-import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
@@ -53,15 +39,16 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_category);
 
+        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        categoryViewModel.init();  // creating homeRepository if already does not exist
+
         ActivityCategoryBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_category);
         binding.setViewmodel(categoryViewModel);
 
         setupRecyclerView(this);
 
-        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
 
-        categoryViewModel.init();  // creating homeRepository if already does not exist
         categoryViewModel.getCategoryRepository().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
@@ -79,6 +66,8 @@ public class CategoryActivity extends AppCompatActivity {
         recyclerViewCategories = (RecyclerView) findViewById(R.id.recyclerViewCategories);
         recyclerViewCategories.setHasFixedSize(true);
 
+        recyclerViewCategories.addItemDecoration(new SpacesItemDecoration(20));
+
         layoutManagerCategories = new GridLayoutManager(ctx, 2, LinearLayoutManager.VERTICAL, false);
         recyclerViewCategories.setLayoutManager(layoutManagerCategories);
 
@@ -88,25 +77,11 @@ public class CategoryActivity extends AppCompatActivity {
         adapterCategories.setOnItemClickListener(new RecyclerViewCategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Category category) {
-                //startActivity(new Intent(CategoryActivity.this, CategoryActivity.class));
+                    Intent intent = new Intent(CategoryActivity.this, AreaActivity.class);
+                    intent.putExtra("categoryId", category.getId());
+                    startActivity(intent);
             }
         });
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//
-//                // ListView Clicked item value
-//                String  itemValue    = (String) listView.getItemAtPosition(position);
-//
-//                // Show Alert
-//                Toast.makeText(getApplicationContext(),
-//                        "Position :" + position + "  ListItem : " + itemValue , Toast.LENGTH_LONG)
-//                        .show();
-//            }
-//        });
     }
 
     @Override

@@ -34,7 +34,7 @@ public class HomeRepository {
 
     public LiveData<MainMenu> getMainMenuMenuResponse(){
         final MutableLiveData<MainMenu> oauthResponse = new MutableLiveData<>();
-        String token = "Bearer " + KeystoreHelper.decodeKey("keyy");
+        String token = "Bearer " + KeystoreHelper.decodeKey("key");
 
         myApi.getMainMenu(token).enqueue(new Callback<MainMenu>() {
             @Override

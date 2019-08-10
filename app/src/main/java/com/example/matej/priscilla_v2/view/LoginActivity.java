@@ -33,16 +33,23 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Constants.instance(this.getApplicationContext());
-//        if(!LoginResolver.getSharedPreferences(this).getAll().isEmpty())
-//        {
-//            startActivity(new Intent(this, HomeActivity.class));
-//            this.finish();
-//        }
-
-//        keyHelper = new KeystoreHelper();
 
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         loginViewModel.init();  // creating loginRepository if already does not exist
+        loginViewModel.setAuthListener(this);
+
+        ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        binding.setViewmodel(loginViewModel);
+        binding.getViewmodel().setKey(getResources().getString(R.string.serviceKey));
+
+//        if(!LoginResolver.getSharedPreferences(this).getAll().isEmpty())
+//        }
+//        {
+//            startActivity(new Intent(this, HomeActivity.class));
+//            this.finish();
+
+//        keyHelper = new KeystoreHelper();
+
 //        loginViewModel.getLoginRepository().observe(this, new Observer<Oauth>() {   // observing response of request
 //            @Override
 //            public void onChanged(Oauth oauth) {
@@ -50,10 +57,6 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
 //            }
 //        });
 
-        ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        binding.setViewmodel(loginViewModel);
-        binding.getViewmodel().setKey(getResources().getString(R.string.serviceKey));
-        loginViewModel.setAuthListener(this);
     }
 
     @Override
@@ -87,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements AuthListener {
                 }
 
 //                Toast.makeText(LoginActivity.this, oauth.getAccessToken(), Toast.LENGTH_SHORT).show();
-                KeystoreHelper.encode(oauth.getAccessToken(), "keyy");
+                KeystoreHelper.encode(oauth.getAccessToken(), "key");
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             }
         });
